@@ -1,0 +1,64 @@
+name: otel-jaeger
+version: 0.1.0
+description: "Runs Jaeger with an OpenTelemetry collector"
+registry: carolynvs
+
+parameters:
+  - name: jaeger-ui-port
+    description: Port of the Jaeger website
+    type: integer
+    default: 16686
+  - name: otel-collector-port
+    description: Port of the OpenTelemetry collector (gRPC)
+    type: integer
+    default: 4317
+
+required:
+  - docker
+
+mixins:
+  - docker
+  - docker-compose
+  - exec
+
+install:
+  - exec:
+      command: echo
+      arguments:
+        - "hello"
+  - exec:
+      description: "Create OpenTelemetry configuration"
+      command: helpers.sh
+      arguments:
+        - set-config
+  - docker-compose:
+      description: "Start Jaeger and OpenTelemetry containers"
+      arguments:
+        - up
+        - --detach
+        - --force-recreate
+
+upgrade:
+  - exec:
+      description: "Update OpenTelemetry configuration"
+      command: ./helpers.sh
+      arguments:
+        - set-config
+  - docker-compose:
+      description: "Update Jaeger and OpenTelemetry containers"
+      arguments:
+        - up
+        - --detach
+        - --force-recreate
+
+uninstall:
+  - docker-compose:
+      description: "Stop Jaeger and OpenTelemetry containers"
+      arguments:
+        - down
+        - -v
+  - exec:
+      description: "Remove configuration volume"
+      command: ./helpers.sh
+      arguments:
+        - remove-config

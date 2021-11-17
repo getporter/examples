@@ -1,0 +1,25 @@
+version: "2"
+services:
+
+  # Jaeger
+  # If we were cool, we would use the agent, etc directly and configure
+  # persistent storage. But this bundle is really designed for local dev.
+  jaeger-all-in-one:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "${JAEGER_UI_PORT}:16686"
+      - "${JAEGER_COLLECTOR_PORT}:14250"
+
+  # Collector
+  otel-collector:
+    image: "otel/opentelemetry-collector-contrib-dev:latest"
+    volumes:
+      - otel-jaeger-config:/etc/otel
+    ports:
+      - "${OTEL_COLLECTOR_PORT}:4317"
+    depends_on:
+      - jaeger-all-in-one
+
+volumes:
+  otel-jaeger-config:
+    external: true
