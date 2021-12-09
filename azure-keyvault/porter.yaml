@@ -1,0 +1,157 @@
+name: hello-keyvault
+version: 0.1.2
+description: "Creates and azure keyvault using the az cli"
+registry: ghcr.io/asalbers
+dockerfile: Dockerfile.tmpl
+
+mixins:
+  - exec
+  - az
+
+install:
+  - az: 
+      description: "Logging into Azure..."  
+      arguments:
+        - login
+      suppress-output: true
+      flags:
+        debug: ""
+        service-principal:
+        username: "'{{bundle.credentials.AZURE_CLIENT_ID}}'"
+        password: "'{{bundle.credentials.AZURE_SP_PASSWORD}}'"
+        tenant: "'{{bundle.credentials.AZURE_TENANT_ID_OR_DNS}}'"
+  - az: 
+      description: "Setting the Azure subscription...."
+      suppress-output: true
+      arguments: 
+        - "account" 
+        - "set" 
+      flags:
+        subscription: "{{ bundle.credentials.AZURE_SUBSCRIPTION_ID}}"
+  - exec:
+      command: bash
+      description: "Creating or using the Azure resource group...."
+      arguments:
+        - ./upsertGroup.sh
+        - "{{bundle.parameters.AZURE_RESOURCE_GROUP_NAME}}"
+        - "{{bundle.parameters.AZURE_GROUP_REGION}}"
+  - exec:
+      command: bash
+      description: "Setting random string...."
+      arguments:
+        - ./helpers.sh
+        - random_string
+      outputs:
+        - name: random_string
+          regex: "(.*)"
+  - az:
+      description: "Creating the KeyVault..."
+      suppress-output: true
+      arguments:
+        - keyvault 
+        - create 
+      flags:
+        location: "eastus2"
+        name: "test-vault-{{bundle.outputs.random_string}}"
+        resource-group: "{{bundle.parameters.AZURE_RESOURCE_GROUP_NAME}}"
+        enable-rbac-authorization: "true"
+      outputs:
+        - name: "keyvault_name"
+          jsonPath: "$.name"
+
+upgrade:
+  - exec:
+      description: "World 2.0"
+      command: ./helpers.sh
+      arguments:
+        - upgrade
+
+uninstall:
+  - az: 
+      description: "Logging into Azure..."  
+      arguments:
+        - login
+      suppress-output: true
+      flags:
+        debug: ""
+        service-principal:
+        username: "'{{bundle.credentials.AZURE_CLIENT_ID}}'"
+        password: "'{{bundle.credentials.AZURE_SP_PASSWORD}}'"
+        tenant: "'{{bundle.credentials.AZURE_TENANT_ID_OR_DNS}}'"
+
+  - az: 
+      description: "Setting the Azure subscription...."
+      suppress-output: true
+      arguments: 
+        - "account" 
+        - "set" 
+      flags:
+        subscription: "{{ bundle.credentials.AZURE_SUBSCRIPTION_ID}}"
+
+  - az:
+      description: "Deleting the KeyVault..."
+      suppress-output: true
+      arguments:
+        - keyvault 
+        - delete 
+      flags:
+        name: "test-vault-{{bundle.parameters.random_string}}"
+        resource-group: "{{bundle.parameters.AZURE_RESOURCE_GROUP_NAME}}"
+
+
+credentials:
+  - name: AZURE_CLIENT_ID
+    description: "The client id for the service principal used to automate the bundle's actions."
+    env: AZURE_CLIENT_ID
+  - name: AZURE_TENANT_ID_OR_DNS
+    description: "The tenant identity in which the service principal resides."
+    env: AZURE_TENANT_ID_OR_DNS
+  - name: AZURE_SP_PASSWORD
+    description: "The service principal password that is used to log into Azure inside the bundle."
+    env: AZURE_SP_PASSWORD
+  - name: AZURE_SUBSCRIPTION_ID
+    description: "The Azure subscription into which to deploy."
+    env: AZURE_SUB_ID
+
+parameters:
+  - name: AZURE_RESOURCE_GROUP_NAME
+    description: "The azure resource group to use or create for the cluster resources."
+    type: string
+    default: hellokeyvault
+  - name: AZURE_GROUP_REGION
+    description: "The azure resource group to use or create for the cluster resources."
+    type: string
+    default: eastus2
+  - name: random_string
+    description: "The random string used to create resources. This is automatically generated and reused, but can be overridden."
+    type: string
+    applyTo:
+      - "upgrade"
+      - "uninstall"
+    source:
+      output: random_string
+  - name: keyvault_name
+    description: "The name of the created KeyVault."
+    type: string
+    source:
+      output: keyvault_name
+    applyTo:
+      - "upgrade"
+      - "uninstall"
+  - name: AZURE_GROUP_REGION
+    description: "The azure resource group to use or create for the cluster resources."
+    type: string
+    default: eastus2
+
+outputs:
+  - name: random_string
+    description: "The random string to use in generating Azure resources."
+    type: string
+    applyTo:
+      - "install"
+  - name: keyvault_name
+    description: "The keyvault name that is created."
+    type: string
+    applyTo:
+      - "install"
+

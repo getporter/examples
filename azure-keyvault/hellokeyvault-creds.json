@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0.0-DRAFT+b6c701f",
+  "name": "hello-keyvault",
+  "created": "2021-07-23T15:12:33.8781812-05:00",
+  "modified": "2021-07-23T15:12:33.8781812-05:00",
+  "credentials": [
+    {
+      "name": "AZURE_CLIENT_ID",
+      "source": {
+        "env": "AZURE_CLIENT_ID"
+      }
+    },
+    {
+      "name": "AZURE_SP_PASSWORD",
+      "source": {
+        "env": "AZURE_SP_PASSWORD"
+      }
+    },
+    {
+      "name": "AZURE_SUBSCRIPTION_ID",
+      "source": {
+        "env": "AZURE_SUB_ID"
+      }
+    },
+    {
+      "name": "AZURE_TENANT_ID_OR_DNS",
+      "source": {
+        "env": "AZURE_TENANT_ID_OR_DNS"
+      }
+    }
+  ]
+}
