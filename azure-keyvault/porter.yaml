@@ -59,13 +59,6 @@ install:
         - name: "keyvault_name"
           jsonPath: "$.name"
 
-upgrade:
-  - exec:
-      description: "World 2.0"
-      command: ./helpers.sh
-      arguments:
-        - upgrade
-
 uninstall:
   - az: 
       description: "Logging into Azure..."  
