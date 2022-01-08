@@ -51,7 +51,7 @@ install:
         - keyvault 
         - create 
       flags:
-        location: "eastus2"
+        location: "{{bundle.parameters.AZURE_GROUP_REGION}}"
         name: "test-vault-{{bundle.outputs.random_string}}"
         resource-group: "{{bundle.parameters.AZURE_RESOURCE_GROUP_NAME}}"
         enable-rbac-authorization: "true"
