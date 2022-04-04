@@ -28,7 +28,7 @@ install:
         - "{{ bundle.parameters.redis-port }}"
       outputs:
         - name: redis-config
-          regex: "redis.conf"
+          regex: "(.*)"
 
   - exec:
       description: "Start redis server"
@@ -45,6 +45,7 @@ install:
         - "{{ bundle.parameters.redis-port }}"
       outputs:
         - name: connection-url
+          regex: "(.*)"
 
 uninstall:
   - exec:

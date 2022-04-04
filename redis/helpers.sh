@@ -13,7 +13,7 @@ echo "/home/nonroot/redis.conf"
 }
 
 start-redis() {
-    redis $1
+    redis-server $1
 }
 
 get-connection-url() {
