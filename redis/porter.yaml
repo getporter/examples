@@ -1,0 +1,54 @@
+name: local-redis
+schemaVersion: 1.0.0-alpha.1
+version: 0.1.0
+description: "Runs a local redis instance"
+registry: vinozzz
+dockerfile: template.Dockerfile
+
+parameters:
+  - name: redis-port
+    description: Port of the redis server that can be connected to
+    type: integer
+    default: 7777
+
+outputs:
+  - name: connection-url
+    type: string
+
+
+mixins:
+  - exec
+
+install:
+  - exec:
+      description: "Create redis config file"
+      command: ./helpers.sh
+      arguments:
+        - setup-config
+        - "{{ bundle.parameters.redis-port }}"
+      outputs:
+        - name: redis-config
+          regex: "redis.conf"
+
+  - exec:
+      description: "Start redis server"
+      command: ./helpers.sh
+      arguments:
+        - start-redis
+        - "{{ bundle.outputs.redis-config }}"
+
+  - exec:
+      description: "Retrieving connection string"
+      command: ./helpers.sh
+      arguments:
+        - get-connection-url
+        - "{{ bundle.parameters.redis-port }}"
+      outputs:
+        - name: connection-url
+
+uninstall:
+  - exec:
+      description: "Remove configuration volume"
+      command: ./helpers.sh
+      arguments:
+        - shutdown
