@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-name=$(cat /cnab/app/foo/name.txt)
-
 install() {
-  echo "Hello, $name"
+  echo Hello World
 }
 
 upgrade() {
-  echo "Hello, $name"
+  echo World 2.0
 }
 
 uninstall() {
-  echo "Goodbye, $name"
+  echo Goodbye World
 }
 
 # Call the requested function and pass the arguments as-is
