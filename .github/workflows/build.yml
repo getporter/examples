@@ -1,0 +1,38 @@
+name: Build
+on: [push,pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+          check-latest: true
+      - name: Set up Mage
+        run: go run mage.go ConfigureAgent
+      - name: Test
+        run: mage -v Build
+      #- name: Login to Docker Hub
+      #  if: ${{ github.event_name != 'pull_request' }}
+      #  uses: docker/login-action@v1
+      #  with:
+      #    registry: ghcr.io
+      #    username: ${{ secrets.GHCR_USER }}
+      #    password: ${{ secrets.GHCR_TOKEN }}
+      #- name: Publish
+      #  if: ${{ github.event_name != 'pull_request' }}
+      #  run: mage -v Publish
+      #  env:
+      #    PORTER_ENV: production

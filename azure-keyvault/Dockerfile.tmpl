@@ -1,6 +1,8 @@
-FROM debian:stretch-slim
+FROM --platform=linux/amd64 debian:bullseye-slim
+# If someone builds on a mac m1, the powershell package is not available
+# so force always building as amd64
 
-ARG BUNDLE_DIR
+# PORTER_INIT
 
 RUN apt-get update && apt-get install -y ca-certificates && apt-get install -y apt-transport-https && apt-get install -y wget
 
