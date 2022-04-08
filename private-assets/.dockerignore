@@ -3,3 +3,4 @@
 .gitignore
 Dockerfile.tmpl
 secrets/
+build-args.txt
