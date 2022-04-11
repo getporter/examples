@@ -1,7 +1,8 @@
+schemaVersion: 1.0.0-alpha.1
 name: exec-outputs
-version: 0.1.1
+version: 0.2.0
 description: "An example Porter bundle demonstrating exec mixin outputs"
-registry: getporter
+registry: ghcr.io/getporter
 dockerfile: Dockerfile.tmpl
 
 mixins:
@@ -15,7 +16,7 @@ parameters:
       - get-users
       - test
       - uninstall
-    path: /root/.kube/config
+    path: /home/nonroot/.kube/config
     source:
       output: kubeconfig
   - name: users.json
@@ -102,6 +103,6 @@ outputs:
       - get-users
   - name: kubeconfig
     type: file
-    path: /root/.kube/config
+    path: /home/nonroot/.kube/config
     applyTo:
       - install
