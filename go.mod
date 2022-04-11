@@ -3,7 +3,7 @@ module get.porter.sh/example-bundles
 go 1.18
 
 // ensuremixins
-replace get.porter.sh/magefiles => github.com/carolynvs/magefiles v0.1.3-0.20220408202551-f0686bb13afa
+replace get.porter.sh/magefiles => github.com/carolynvs/magefiles v0.1.3-0.20220411141833-0c2a892e6ff1
 
 require (
 	get.porter.sh/magefiles v0.1.3
