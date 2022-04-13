@@ -30,4 +30,3 @@ They aren't intended to be used to install an application (see above).
 * [Hello](/hello/) is a hello world bundle for trying out Porter.
 * [Kubernetes](/kubernetes/) demonstrates how to use a Kubernetes kubeconfig with a bundle.
 * [Plugings Tutorial](/plugins-tutorial/) is the source code for the [Plugins Tutorial](https://getporter.org/plugins/tutorial/).
-* [Service Fabric](/service-fabric-cli/) demonstrates how to install a tool into a bundle when there isn't a custom mixin available.
