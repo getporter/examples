@@ -7,8 +7,10 @@ package main
 
 import (
 	"fmt"
+	"get.porter.sh/example-bundles/mage/examples"
+	"get.porter.sh/example-bundles/mage/setup"
 	"get.porter.sh/magefiles/porter"
-	"golang.org/x/sync/errgroup"
+	"github.com/carolynvs/magex/mgx"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -22,28 +24,22 @@ import (
 )
 
 func Build() {
-	mg.SerialDeps(BuildExamples)
+	mg.Deps(BuildExamples)
 }
 
 // BuildExamples builds every example bundle
 func BuildExamples() error {
-	results, err := ioutil.ReadDir(".")
+	var bigErr *multierror.Error
+	names, err := examples.List(".")
 	if err != nil {
 		return err
 	}
 
-	var bigErr *multierror.Error
-	for _, result := range results {
-		if result.IsDir() {
-			bundleName := result.Name()
-			if _, err := os.Stat(filepath.Join(bundleName, "porter.yaml")); err == nil {
-				err := BuildExample(bundleName)
-				if err != nil {
-					// Keep trying to build all the bundles, don't stop on the first one
-					bigErr = multierror.Append(bigErr, fmt.Errorf("error building bundle %s: %w", bundleName, err))
-					continue
-				}
-			}
+	for _, bundleName := range names {
+		if err := BuildExample(bundleName); err != nil {
+			// Keep trying to build all the bundles, don't stop on the first one
+			bigErr = multierror.Append(bigErr, fmt.Errorf("error building bundle %s: %w", bundleName, err))
+			continue
 		}
 	}
 
@@ -52,7 +48,7 @@ func BuildExamples() error {
 
 // BuildExample builds the specified example bundle
 func BuildExample(name string) error {
-	mg.SerialDeps(installMixins)
+	mg.SerialDeps(setup.InstallMixins)
 
 	fmt.Println("\n==========================")
 	fmt.Printf("Building example bundle: %s\n", name)
@@ -65,29 +61,56 @@ func BuildExample(name string) error {
 	}
 	// Always build for amd64 even if on an arm host
 	// This is a bit of a hack until we have multi-arch support
-	return shx.Command("porter", "build").
+	return shx.Command("porter", "build", "--debug", "--verbose").
 		In(name).Env("DOCKER_DEFAULT_PLATFORM=linux/amd64").RunV()
 }
 
-func installMixins() error {
+func Publish() {
+	mg.Deps(PublishExamples)
+}
+
+// PublishExamples publishes every example bundle
+func PublishExamples() error {
+	var bigErr *multierror.Error
+	names, err := examples.List(".")
+	if err != nil {
+		return err
+	}
+
+	for _, bundleName := range names {
+		if err := PublishExample(bundleName); err != nil {
+			// Keep trying to publish all the bundles, don't stop on the first one
+			bigErr = multierror.Append(bigErr, fmt.Errorf("error publishing bundle %s: %w", bundleName, err))
+			continue
+		}
+	}
+
+	return bigErr.ErrorOrNil()
+}
+
+// PublishExample publishes the specified example bundle
+func PublishExample(name string) error {
 	mg.SerialDeps(porter.UseBinForPorterHome, porter.EnsurePorter)
 
-	mixins := []porter.InstallMixinOptions{
-		{Name: "arm"},
-		{Name: "az"},
-		{Name: "docker"},
-		{Name: "docker-compose"},
-		{Name: "exec"},
-		{Name: "helm3", Feed: "https://mchorfa.github.io/porter-helm3/atom.xml", Version: "v0.1.14"},
-		{Name: "kubernetes"},
-		{Name: "terraform"},
+	fmt.Println("\n==========================")
+
+	registryFlag := ""
+	registry := os.Getenv("PORTER_REGISTRY")
+	if registry != "" {
+		registryFlag = "--registry=" + registry
 	}
-	var errG errgroup.Group
-	for _, mixin := range mixins {
-		mixin := mixin
-		errG.Go(func() error {
-			return porter.EnsureMixin(mixin)
-		})
+
+	// Check if the bundle already is published
+	bundleRef, err := examples.GetBundleRef(name, registry)
+	mgx.Must(err)
+
+	// Do not overwrite an already published bundle
+	// See https://github.com/getporter/porter/issues/2017
+	if err := shx.RunS("porter", "explain", "-r", bundleRef); err == nil {
+		fmt.Printf("Skipping publish for example bundle: %s. The bundle is already published to %s.\n", name, bundleRef)
+		return nil
 	}
-	return errG.Wait()
+
+	fmt.Printf("Publishing example bundle: %s\n", name)
+	return shx.Command("porter", "publish", registryFlag).CollapseArgs().In(name).RunV()
 }

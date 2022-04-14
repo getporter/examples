@@ -26,7 +26,7 @@ You can view the collected data by opening your browser to http://localhost:1668
 
 ## Parameters
 
-Use `porter explain --reference carolynvs/otel-jaeger:v0.1.0` for the most up-to-date explanation of how to run this bundle.
+Use `porter explain --reference ghcr.io/getporter/examples/otel-jaeger:v0.1.0` for the most up-to-date explanation of how to run this bundle.
 
 | Name | Default | Description |
 | ---- | ------- | ----------- |
@@ -40,7 +40,7 @@ If you change the otel-collector-port, then you need to configure telemetry.endp
 Note that each time you install or upgrade the bundle, all existing collected data is lost.
 
 ```
-porter install --reference carolynvs/otel-jaeger:v0.1.0 --allow-docker-host-access
+porter install --reference ghcr.io/getporter/examples/otel-jaeger:v0.1.0 --allow-docker-host-access
 ```
 
 [diagnostics]: https://release-v1.porter.sh/administrators/diagnostics/

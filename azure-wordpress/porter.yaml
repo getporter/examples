@@ -1,5 +1,5 @@
 schemaVersion: 1.0.0-alpha.1
-name: azure-wordpress
+name: examples/azure-wordpress
 version: 0.2.0
 registry: ghcr.io/getporter
 
