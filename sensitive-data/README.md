@@ -12,7 +12,7 @@ Follow the steps in the [Change default secret plugin](https://release-v1.porter
 to setup [filesystem](https://release-v1.porter.sh/plugins/filesystem/) plugin.
 After setting up the secret plugin, run to install the bundle:
 ```
-porter install --reference ghcr.io/getporter/examples/porter-sensitive-data:v0.1.0 --param password=test
+porter install --reference ghcr.io/getporter/examples/sensitive-data:v0.1.0 --param password=test
 ```
 
 
