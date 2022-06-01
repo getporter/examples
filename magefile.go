@@ -7,14 +7,15 @@ package main
 
 import (
 	"fmt"
-	"get.porter.sh/example-bundles/mage/examples"
-	"get.porter.sh/example-bundles/mage/setup"
-	"get.porter.sh/magefiles/porter"
-	"github.com/carolynvs/magex/mgx"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"get.porter.sh/example-bundles/mage/examples"
+	"get.porter.sh/example-bundles/mage/setup"
+	"get.porter.sh/magefiles/porter"
+	"github.com/carolynvs/magex/mgx"
 
 	// mage:import
 	_ "get.porter.sh/magefiles/ci"
@@ -25,6 +26,10 @@ import (
 
 func Build() {
 	mg.Deps(BuildExamples)
+}
+
+func Test() error {
+	return shx.RunV("go", "test", "./...")
 }
 
 // BuildExamples builds every example bundle

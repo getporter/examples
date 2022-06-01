@@ -1,13 +1,14 @@
 package examples
 
 import (
+	"io/ioutil"
+	"os"
+	"testing"
+
 	"github.com/carolynvs/magex/mgx"
 	"github.com/carolynvs/magex/shx"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"io/ioutil"
-	"os"
-	"testing"
 )
 
 func TestListExampleBundles(t *testing.T) {
@@ -25,7 +26,24 @@ func TestListExampleBundles(t *testing.T) {
 }
 
 func TestGetBundleRef(t *testing.T) {
-	ref, err := GetBundleRef("../../hello", "localhost:5000")
-	require.NoError(t, err)
-	assert.Equal(t, "localhost:5000/examples/hello:v0.2.0", ref)
+	t.Run("valid manifest", func(t *testing.T) {
+		ref, err := GetBundleRef("../../hello", "localhost:5000")
+		require.NoError(t, err)
+		assert.Equal(t, "localhost:5000/examples/porter-hello:v0.2.0", ref)
+	})
+
+	t.Run("missing registry", func(t *testing.T) {
+		_, err := GetBundleRef("testdata/missing-registry", "localhost:5000")
+		assert.EqualError(t, err, "registry was not defined in testdata/missing-registry/porter.yaml")
+	})
+
+	t.Run("missing name", func(t *testing.T) {
+		_, err := GetBundleRef("testdata/missing-name", "localhost:5000")
+		assert.EqualError(t, err, "name was not defined in testdata/missing-name/porter.yaml")
+	})
+
+	t.Run("missing version", func(t *testing.T) {
+		_, err := GetBundleRef("testdata/missing-version", "localhost:5000")
+		assert.EqualError(t, err, "version was not defined in testdata/missing-version/porter.yaml")
+	})
 }
