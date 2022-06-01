@@ -2,10 +2,11 @@ package examples
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
+	"gopkg.in/yaml.v3"
 )
 
 // GetBundleRef builds the reference to the specified example bundle, given a registry override.
@@ -21,9 +22,21 @@ func GetBundleRef(bundleDir string, registryOverride string) (string, error) {
 		return "", fmt.Errorf("error parsing porter manifest at %s: %w", manifestPath, err)
 	}
 
-	name := manifest["name"].(string)
-	version := manifest["version"].(string)
-	registry := manifest["registry"].(string)
+	name, ok := manifest["name"].(string)
+	if !ok {
+		return "", fmt.Errorf("name was not defined in %s", manifestPath)
+	}
+
+	version, ok := manifest["version"].(string)
+	if !ok {
+		return "", fmt.Errorf("version was not defined in %s", manifestPath)
+	}
+
+	registry, ok := manifest["registry"].(string)
+	if !ok {
+		return "", fmt.Errorf("registry was not defined in %s", manifestPath)
+	}
+
 	if registryOverride != "" {
 		registry = registryOverride
 	}

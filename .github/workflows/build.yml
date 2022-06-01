@@ -25,5 +25,7 @@ jobs:
           check-latest: true
       - name: Set up Mage
         run: go run mage.go ConfigureAgent
-      - name: Test
+      - name: Build
         run: mage -v Build
+      - name: Test
+        run: mage -v Test
