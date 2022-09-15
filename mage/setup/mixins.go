@@ -9,7 +9,7 @@ import (
 // InstallMixins used by the example bundles.
 // If you add an example that uses a new mixin, update this function to install it.
 func InstallMixins() error {
-	mg.SerialDeps(porter.UseBinForPorterHome, porter.EnsurePorter)
+	mg.SerialDeps(porter.UseBinForPorterHome, EnsurePorter)
 
 	mixins := []porter.InstallMixinOptions{
 		{Name: "arm"},
@@ -31,4 +31,8 @@ func InstallMixins() error {
 		})
 	}
 	return errG.Wait()
+}
+
+func EnsurePorter() {
+	porter.EnsurePorterAt("v1.0.0-rc.1")
 }
