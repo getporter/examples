@@ -65,7 +65,7 @@ func BuildExample(name string) error {
 	}
 	// Always build for amd64 even if on an arm host
 	// This is a bit of a hack until we have multi-arch support
-	return shx.Command("porter", "build", "--debug", "--verbose").
+	return shx.Command("porter", "build").
 		In(name).Env("DOCKER_DEFAULT_PLATFORM=linux/amd64").RunV()
 }
 
