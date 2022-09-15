@@ -19,7 +19,7 @@ func InstallMixins() error {
 		{Name: "exec"},
 		// Use a build of helm3 that supports nonroot
 		// https://github.com/MChorfa/porter-helm3/pull/42
-		{Name: "helm3", URL: "https://github.com/carolynvs/porter-helm3/releases/download", Version: "v0.1.15-5-g8df61c1"},
+		{Name: "helm3", Feed: "https://mchorfa.github.io/porter-helm3/atom.xml", Version: "v1.0.0-rc.1"},
 		{Name: "kubernetes"},
 		{Name: "terraform"},
 	}
