@@ -24,7 +24,6 @@ resource "azurerm_cosmosdb_account" "db" {
   }
 
   geo_location {
-    prefix            = "porterform-${azurerm_resource_group.rg.location}"
     location          = azurerm_resource_group.rg.location
     failover_priority = 0
   }

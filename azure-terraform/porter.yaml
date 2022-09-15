@@ -1,9 +1,9 @@
 ## This section defines the metadata that defines the bundle. This includes the name of the generated
 ## invocation image as well as the tag that will be applied to the bundle when it is published.
 
-schemaVersion: 1.0.0-alpha.1
+schemaVersion: 1.0.0
 name: examples/azure-terraform
-version: 2.0.0
+version: 0.2.0
 description: "An example Porter Bundle using Terraform and Azure"
 registry: ghcr.io/getporter
 
@@ -12,7 +12,7 @@ mixins:
   - arm
   - exec
   - terraform:
-      clientVersion: 1.0.4
+      clientVersion: 1.2.9
 
 ## This section defines what credentials are used for the bundle. In this case, we are operating
 ## against Azure, so we need some Azure Service Principal information.
@@ -84,12 +84,12 @@ install:
       description: "Create an Azure Storage Account"
       type: arm
       template: "arm/storage.json"
-      name: "{{ bundle.parameters.storage_account_name }}"
-      resourceGroup: "{{ bundle.parameters.storage_rg }}"
+      name: ${ bundle.parameters.storage_account_name }
+      resourceGroup: ${ bundle.parameters.storage_rg }
       parameters:
-        location: "{{ bundle.parameters.location }}"
-        storageAccountName: "{{ bundle.parameters.storage_account_name }}"
-        storageContainerName: "{{ bundle.parameters.storage_container_name }}"
+        location: ${ bundle.parameters.location }
+        storageAccountName: ${ bundle.parameters.storage_account_name }
+        storageContainerName: ${ bundle.parameters.storage_container_name }
       outputs:
         - name: storage_account_key
           key: storage_account_key
@@ -97,18 +97,18 @@ install:
   - terraform:
       description: "Create Azure CosmosDB and Event Hubs"
       backendConfig:
-        key: "{{ bundle.name }}.tfstate"
-        storage_account_name: "{{ bundle.parameters.storage_account_name }}"
-        container_name: "{{ bundle.parameters.storage_container_name }}"
-        access_key: "{{ bundle.outputs.storage_account_key }}"
+        key: ${ bundle.name }}.tfstate"
+        storage_account_name: ${ bundle.parameters.storage_account_name }
+        container_name: ${ bundle.parameters.storage_container_name }
+        access_key: ${ bundle.outputs.storage_account_key }
       vars:
-        subscription_id: "{{bundle.credentials.subscription_id}}"
-        tenant_id: "{{bundle.credentials.tenant_id}}"
-        client_id: "{{bundle.credentials.client_id}}"
-        client_secret: "{{bundle.credentials.client_secret}}" 
-        database_name: "{{bundle.parameters.database-name}}"
-        resource_group_name: "{{bundle.parameters.resource_group_name}}"
-        resource_group_location: "{{bundle.parameters.location}}"
+        subscription_id: ${bundle.credentials.subscription_id}
+        tenant_id: ${bundle.credentials.tenant_id}
+        client_id: ${bundle.credentials.client_id}
+        client_secret: ${bundle.credentials.client_secret} 
+        database_name: ${bundle.parameters.database-name}
+        resource_group_name: ${bundle.parameters.resource_group_name}
+        resource_group_location: ${bundle.parameters.location}
       outputs:
         - name: cosmos-db-uri
         - name: eventhubs_connection_string
@@ -117,18 +117,18 @@ upgrade:
   - terraform:
       description: "Update Azure CosmosDB and Event Hubs"
       vars:
-        subscription_id: "{{bundle.credentials.subscription_id}}"
-        tenant_id: "{{bundle.credentials.tenant_id}}"
-        client_id: "{{bundle.credentials.client_id}}"
-        client_secret: "{{bundle.credentials.client_secret}}" 
-        database_name: "{{bundle.parameters.database-name}}"
-        resource_group_name: "{{bundle.parameters.resource_group_name}}"
-        resource_group_location: "{{bundle.parameters.location}}"
+        subscription_id: ${bundle.credentials.subscription_id}
+        tenant_id: ${bundle.credentials.tenant_id}
+        client_id: ${bundle.credentials.client_id}
+        client_secret: ${bundle.credentials.client_secret} 
+        database_name: ${bundle.parameters.database-name}
+        resource_group_name: ${bundle.parameters.resource_group_name}
+        resource_group_location: ${bundle.parameters.location}
       backendConfig:
-        key: "{{ bundle.name }}.tfstate"
-        storage_account_name: "{{ bundle.parameters.storage_account_name }}"
-        container_name: "{{ bundle.parameters.storage_container_name }}"
-        access_key: "{{ bundle.outputs.storage_account_key }}"
+        key: "${ bundle.name }}.tfstate"
+        storage_account_name: ${ bundle.parameters.storage_account_name }
+        container_name: ${ bundle.parameters.storage_container_name }
+        access_key: ${ bundle.outputs.storage_account_key }
       outputs:
         - name: cosmos-db-uri
         - name: eventhubs_connection_string
@@ -137,26 +137,26 @@ uninstall:
   - terraform:
       description: "Remove Azure CosmosDB and Event Hubs"
       backendConfig:
-        key: "{{ bundle.name }}.tfstate"
-        storage_account_name: "{{ bundle.parameters.storage_account_name }}"
-        container_name: "{{ bundle.parameters.storage_container_name }}"
-        access_key: "{{ bundle.outputs.storage_account_key }}"
+        key: "${ bundle.name }}.tfstate"
+        storage_account_name: ${ bundle.parameters.storage_account_name }
+        container_name: ${ bundle.parameters.storage_container_name }
+        access_key: ${ bundle.outputs.storage_account_key }
       vars:
-        subscription_id: "{{bundle.credentials.subscription_id}}"
-        tenant_id: "{{bundle.credentials.tenant_id}}"
-        client_id: "{{bundle.credentials.client_id}}"
-        client_secret: "{{bundle.credentials.client_secret}}" 
-        database_name: "{{bundle.parameters.database-name}}"
-        resource_group_name: "{{bundle.parameters.resource_group_name}}"
-        resource_group_location: "{{bundle.parameters.location}}"
+        subscription_id: ${bundle.credentials.subscription_id}
+        tenant_id: ${bundle.credentials.tenant_id}
+        client_id: ${bundle.credentials.client_id}
+        client_secret: ${bundle.credentials.client_secret} 
+        database_name: ${bundle.parameters.database-name}
+        resource_group_name: ${bundle.parameters.resource_group_name}
+        resource_group_location: ${bundle.parameters.location}
 
   - arm:
       description: "Remove the Azure Storage Account"
       type: arm
       template: "arm/storage.json"
-      name: "{{ bundle.parameters.storage_account_name }}"
-      resourceGroup: "{{ bundle.parameters.storage_rg }}"
+      name: ${ bundle.parameters.storage_account_name }
+      resourceGroup: ${ bundle.parameters.storage_rg }
       parameters:
-        location: "{{ bundle.parameters.location }}"
-        storageAccountName: "{{ bundle.parameters.storage_account_name }}"
-        storageContainerName: "{{ bundle.parameters.storage_container_name }}"
+        location: ${ bundle.parameters.location }
+        storageAccountName: ${ bundle.parameters.storage_account_name }
+        storageContainerName: ${ bundle.parameters.storage_container_name }
