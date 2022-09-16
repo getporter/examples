@@ -97,7 +97,7 @@ install:
   - terraform:
       description: "Create Azure CosmosDB and Event Hubs"
       backendConfig:
-        key: ${ bundle.name }}.tfstate"
+        key: ${ bundle.name }}.tfstate
         storage_account_name: ${ bundle.parameters.storage_account_name }
         container_name: ${ bundle.parameters.storage_container_name }
         access_key: ${ bundle.outputs.storage_account_key }
@@ -125,7 +125,7 @@ upgrade:
         resource_group_name: ${bundle.parameters.resource_group_name}
         resource_group_location: ${bundle.parameters.location}
       backendConfig:
-        key: "${ bundle.name }}.tfstate"
+        key: ${ bundle.name }}.tfstate
         storage_account_name: ${ bundle.parameters.storage_account_name }
         container_name: ${ bundle.parameters.storage_container_name }
         access_key: ${ bundle.outputs.storage_account_key }
@@ -137,7 +137,7 @@ uninstall:
   - terraform:
       description: "Remove Azure CosmosDB and Event Hubs"
       backendConfig:
-        key: "${ bundle.name }}.tfstate"
+        key: ${ bundle.name }}.tfstate
         storage_account_name: ${ bundle.parameters.storage_account_name }
         container_name: ${ bundle.parameters.storage_container_name }
         access_key: ${ bundle.outputs.storage_account_key }

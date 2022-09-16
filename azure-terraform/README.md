@@ -86,7 +86,7 @@ Finally, please note how the `porter-terraform` mixin is used:
 - terraform:
       description: "Create Azure CosmosDB and Event Hubs"
       backendConfig:
-        key: "${ bundle.name }}.tfstate"
+        key: ${ bundle.name }}.tfstate
         storage_account_name: ${ bundle.parameters.storage_account_name }
         container_name: ${ bundle.parameters.storage_container_name }
         access_key: ${ bundle.outputs.storage_account_key }
