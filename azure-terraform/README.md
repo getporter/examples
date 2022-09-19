@@ -86,18 +86,18 @@ Finally, please note how the `porter-terraform` mixin is used:
 - terraform:
       description: "Create Azure CosmosDB and Event Hubs"
       backendConfig:
-        key: "{{ bundle.name }}.tfstate"
-        storage_account_name: "{{ bundle.parameters.storage_account_name }}"
-        container_name: "{{ bundle.parameters.storage_container_name }}"
-        access_key: "{{ bundle.outputs.storage_account_key }}"
+        key: ${ bundle.name }}.tfstate
+        storage_account_name: ${ bundle.parameters.storage_account_name }
+        container_name: ${ bundle.parameters.storage_container_name }
+        access_key: ${ bundle.outputs.storage_account_key }
       vars:
-        subscription_id: "{{bundle.credentials.subscription_id}}"
-        tenant_id: "{{bundle.credentials.tenant_id}}"
-        client_id: "{{bundle.credentials.client_id}}"
-        client_secret: "{{bundle.credentials.client_secret}}"
-        database_name: "{{bundle.parameters.database-name}}"
-        resource_group_name: "{{bundle.parameters.resource_group_name}}"
-        resource_group_location: "{{bundle.parameters.location}}"
+        subscription_id: ${bundle.credentials.subscription_id}
+        tenant_id: ${bundle.credentials.tenant_id}
+        client_id: ${bundle.credentials.client_id}
+        client_secret: ${bundle.credentials.client_secret}
+        database_name: ${bundle.parameters.database-name}
+        resource_group_name: ${bundle.parameters.resource_group_name}
+        resource_group_location: ${bundle.parameters.location}
       outputs:
         - name: cosmos-db-uri
         - name: eventhubs_connection_string
