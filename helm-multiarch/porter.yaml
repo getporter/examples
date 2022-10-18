@@ -1,0 +1,67 @@
+# Version of the porter.yaml schema used by this file
+# Requires porter v1.0.0+
+schemaVersion: 1.0.0
+
+# Name of the bundle
+name: examples/helm-multiarch
+
+# Version of the bundle. Change this each time you modify a published bundle.
+version: 0.1.0
+
+# Description of the bundle and what it does.
+description: "Deploy nginx (multi-arch) to a cluster with Porter"
+
+# Registry where the bundle is published to by default
+registry: "ghcr.io/getporter"
+
+# Declare and optionally configure the mixins used by the bundle
+mixins:
+  - exec
+  - helm3:
+      clientVersion: v3.10.1
+
+credentials:
+  - name: kubeconfig
+    path: /home/nonroot/.kube/config
+
+images:
+  nginx:
+    repository: nginx
+    imageType: docker
+    # This tag points to a manifest for a multi-arch image
+    # All arch specific images referenced in the manifest are relocated with the bundle
+    # So publishing will be slower than you'd expect (it's copying 8 nginx images, not just 1)
+    tag: latest
+
+# Define the steps that should execute when the bundle is installed
+install:
+  - helm3:
+      description: Install nginx
+      chart: ./charts/nginx
+      namespace: default
+      name: porter-helm-nginx
+      set:
+        # Instruct helm to use the relocated multi-arch image
+        # Kubernetes will handle selecting the appropriate arch specific digest associated with the image
+        # as long as we pass it the multi-arch image reference and not a reference to a specific architecture.
+        image.repository: ${ bundle.images.nginx.repository }
+        image.digest: ${ bundle.images.nginx.digest }
+
+# Define the steps that should execute when the bundle is upgraded
+upgrade:
+  - helm3:
+      description: Upgrade nginx
+      chart: ./charts/nginx
+      namespace: default
+      name: porter-helm-nginx
+      set:
+        image.repository: ${ bundle.images.nginx.repository }
+        image.digest: ${ bundle.images.nginx.digest }
+
+# Define the steps that should execute when the bundle is uninstalled
+uninstall:
+  - helm3:
+      description: Uninstall nginx
+      namespace: default
+      releases:
+        - porter-helm-nginx
