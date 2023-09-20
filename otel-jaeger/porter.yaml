@@ -1,6 +1,6 @@
 schemaVersion: 1.0.0-alpha.1
 name: examples/otel-jaeger
-version: 0.1.0
+version: 0.1.1
 description: "Runs Jaeger with an OpenTelemetry collector"
 registry: ghcr.io/getporter
 
@@ -29,7 +29,7 @@ install:
         - "hello"
   - exec:
       description: "Create OpenTelemetry configuration"
-      command: helpers.sh
+      command: ./helpers.sh
       arguments:
         - set-config
   - docker-compose:
