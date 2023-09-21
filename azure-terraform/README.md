@@ -131,7 +131,7 @@ Once this command has finished, you will see a `.cnab` directory created in the 
 
 ```bash
 $ more .cnab/Dockerfile
-FROM debian:stretch-slim
+FROM debian:stable-slim
 
 ARG BUNDLE_DIR
 
