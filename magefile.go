@@ -6,7 +6,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -57,7 +56,7 @@ func BuildExample(name string) error {
 	fmt.Println("\n==========================")
 	fmt.Printf("Building example bundle: %s\n", name)
 
-	if customBuildFlags, err := ioutil.ReadFile(filepath.Join(name, "build-args.txt")); err == nil {
+	if customBuildFlags, err := os.ReadFile(filepath.Join(name, "build-args.txt")); err == nil {
 		customBuildArgs := strings.Split(string(customBuildFlags), " ")
 		buildArgs := append([]string{"build"}, customBuildArgs...)
 		return shx.Command("porter", buildArgs...).

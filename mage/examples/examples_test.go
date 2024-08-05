@@ -1,7 +1,6 @@
 package examples
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -12,7 +11,7 @@ import (
 )
 
 func TestListExampleBundles(t *testing.T) {
-	tmp, err := ioutil.TempDir("", "example-bundles")
+	tmp, err := os.MkdirTemp("", "example-bundles")
 	require.NoError(t, err)
 	defer os.RemoveAll(tmp)
 

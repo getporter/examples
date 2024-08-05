@@ -2,7 +2,6 @@ package examples
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -12,7 +11,7 @@ import (
 // GetBundleRef builds the reference to the specified example bundle, given a registry override.
 func GetBundleRef(bundleDir string, registryOverride string) (string, error) {
 	manifestPath := filepath.Join(bundleDir, "porter.yaml")
-	contents, err := ioutil.ReadFile(manifestPath)
+	contents, err := os.ReadFile(manifestPath)
 	if err != nil {
 		return "", fmt.Errorf("error reading porter manifest at %s: %w", manifestPath, err)
 	}
@@ -46,7 +45,7 @@ func GetBundleRef(bundleDir string, registryOverride string) (string, error) {
 
 // List returns the names of all example bundles in the specified directory.
 func List(dir string) ([]string, error) {
-	results, err := ioutil.ReadDir(dir)
+	results, err := os.ReadDir(dir)
 	if err != nil {
 		return nil, fmt.Errorf("error listing example bundles in current directory: %w", err)
 	}
