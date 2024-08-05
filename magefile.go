@@ -12,6 +12,7 @@ import (
 
 	"get.porter.sh/example-bundles/mage/examples"
 	"get.porter.sh/example-bundles/mage/setup"
+	"get.porter.sh/magefiles/git"
 	"get.porter.sh/magefiles/porter"
 	"github.com/carolynvs/magex/mgx"
 
@@ -116,4 +117,10 @@ func PublishExample(name string) error {
 
 	fmt.Printf("Publishing example bundle: %s\n", name)
 	return shx.Command("porter", "publish", registryFlag).CollapseArgs().In(name).RunV()
+}
+
+// SetupDCO configures your git repository to automatically sign your commits
+// to comply with our DCO
+func SetupDCO() error {
+	return git.SetupDCO()
 }
