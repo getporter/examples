@@ -2,7 +2,7 @@ module get.porter.sh/example-bundles
 
 go 1.21
 
-toolchain go1.22.5
+toolchain go1.21.3
 
 require (
 	get.porter.sh/magefiles v0.6.8
