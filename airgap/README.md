@@ -1,3 +1,3 @@
 # Example: Airgapped Environments
 
-Try out this example at https://release-v1.porter.sh/examples/airgap/.
+Try out this example at https://porter.sh/examples/airgap/.
