@@ -6,13 +6,13 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"get.porter.sh/example-bundles/mage/examples"
 	"get.porter.sh/example-bundles/mage/setup"
+	"get.porter.sh/magefiles/git"
 	"get.porter.sh/magefiles/porter"
 	"github.com/carolynvs/magex/mgx"
 
@@ -57,7 +57,7 @@ func BuildExample(name string) error {
 	fmt.Println("\n==========================")
 	fmt.Printf("Building example bundle: %s\n", name)
 
-	if customBuildFlags, err := ioutil.ReadFile(filepath.Join(name, "build-args.txt")); err == nil {
+	if customBuildFlags, err := os.ReadFile(filepath.Join(name, "build-args.txt")); err == nil {
 		customBuildArgs := strings.Split(string(customBuildFlags), " ")
 		buildArgs := append([]string{"build"}, customBuildArgs...)
 		return shx.Command("porter", buildArgs...).
@@ -117,4 +117,10 @@ func PublishExample(name string) error {
 
 	fmt.Printf("Publishing example bundle: %s\n", name)
 	return shx.Command("porter", "publish", registryFlag).CollapseArgs().In(name).RunV()
+}
+
+// SetupDCO configures your git repository to automatically sign your commits
+// to comply with our DCO
+func SetupDCO() error {
+	return git.SetupDCO()
 }
