@@ -17,9 +17,7 @@ func InstallMixins() error {
 		{Name: "docker"},
 		{Name: "docker-compose"},
 		{Name: "exec"},
-		// Use a build of helm3 that supports nonroot
-		// https://github.com/MChorfa/porter-helm3/pull/42
-		{Name: "helm3", Feed: "https://mchorfa.github.io/porter-helm3/atom.xml", Version: "v1.0.0-rc.1"},
+		{Name: "helm3", Feed: "https://mchorfa.github.io/porter-helm3/atom.xml", Version: "v1.0.1"},
 		{Name: "kubernetes"},
 		{Name: "terraform"},
 	}
@@ -34,5 +32,5 @@ func InstallMixins() error {
 }
 
 func EnsurePorter() {
-	porter.EnsurePorterAt("v1.0.0-rc.1")
+	porter.EnsurePorter()
 }
