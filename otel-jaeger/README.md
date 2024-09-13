@@ -43,4 +43,4 @@ Note that each time you install or upgrade the bundle, all existing collected da
 porter install --reference ghcr.io/getporter/examples/otel-jaeger:v0.1.0 --allow-docker-host-access
 ```
 
-[diagnostics]: https://release-v1.porter.sh/administrators/diagnostics/
+[diagnostics]: https://porter.sh/administrators/diagnostics/
