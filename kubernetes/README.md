@@ -12,4 +12,4 @@ porter install -c kubernetes
 
 🚨 GKE requires additional credentials and parameters in order to [connect to a cluster][gke-connect], so use the [GKE Example](/examples/gke-example) instead.
 
-[gke-connect]: http://localhost:1313/best-practices/gke/
+[gke-connect]: https://porter.sh/docs/integrations/gke/
