@@ -1,6 +1,6 @@
 schemaVersion: 1.0.0-alpha.1
 name: examples/whalesay
-version: 0.2.0
+version: 0.2.1
 description: "An example bundle that uses docker through the magic of whalespeak"
 registry: ghcr.io/getporter
 
@@ -21,16 +21,16 @@ mixins:
 install:
   - docker:
       run:
-        image: "docker/whalesay:latest"
+        image: "ghcr.io/getporter/examples/images/whalesay:latest"
         rm: true
         arguments:
           - cowsay
           - Hello World
-      
+
 upgrade:
   - docker:
       run:
-        image: "docker/whalesay:latest"
+        image: "ghcr.io/getporter/examples/images/whalesay:latest"
         rm: true
         arguments:
           - cowsay
@@ -39,7 +39,7 @@ upgrade:
 say:
   - docker:
       run:
-        image: "docker/whalesay:latest"
+        image: "ghcr.io/getporter/examples/images/whalesay:latest"
         rm: true
         arguments:
           - cowsay
@@ -48,7 +48,7 @@ say:
 uninstall:
   - docker:
       run:
-        image: "docker/whalesay:latest"
+        image: "ghcr.io/getporter/examples/images/whalesay:latest"
         rm: true
         arguments:
           - cowsay
