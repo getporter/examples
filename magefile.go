@@ -116,7 +116,11 @@ func PublishExample(name string) error {
 	}
 
 	fmt.Printf("Publishing example bundle: %s\n", name)
-	return shx.Command("porter", "publish", registryFlag).CollapseArgs().In(name).RunV()
+	err = shx.Command("porter", "publish", registryFlag).CollapseArgs().In(name).RunV()
+	mgx.Must(err)
+
+	// Publish with latest tag
+	return shx.Command("porter", "publish", "--tag", "latest").CollapseArgs().In(name).RunV()
 }
 
 // SetupDCO configures your git repository to automatically sign your commits
