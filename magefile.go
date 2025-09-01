@@ -14,13 +14,13 @@ import (
 	"get.porter.sh/example-bundles/mage/setup"
 	"get.porter.sh/magefiles/git"
 	"get.porter.sh/magefiles/porter"
-	"github.com/carolynvs/magex/mgx"
+	"github.com/uwu-tools/magex/mgx"
 
 	// mage:import
 	_ "get.porter.sh/magefiles/ci"
-	"github.com/carolynvs/magex/shx"
 	"github.com/hashicorp/go-multierror"
 	"github.com/magefile/mage/mg"
+	"github.com/uwu-tools/magex/shx"
 )
 
 func Build() {
