@@ -37,5 +37,5 @@ func InstallMixins() error {
 }
 
 func EnsurePorter() {
-	porter.EnsurePorterAt("v1.2.1")
+	porter.EnsurePorter()
 }
