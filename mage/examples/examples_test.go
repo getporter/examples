@@ -4,10 +4,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/carolynvs/magex/mgx"
-	"github.com/carolynvs/magex/shx"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/uwu-tools/magex/mgx"
+	"github.com/uwu-tools/magex/shx"
 )
 
 func TestListExampleBundles(t *testing.T) {
