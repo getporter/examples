@@ -25,6 +25,11 @@ func InstallMixins() error {
 	for _, mixin := range mixins {
 		mixin := mixin
 		errG.Go(func() error {
+			for i := 0; i < 3; i++ {
+				if err := porter.EnsureMixin(mixin); err == nil {
+					return nil
+				}
+			}
 			return porter.EnsureMixin(mixin)
 		})
 	}
