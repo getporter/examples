@@ -8,16 +8,17 @@ parameters:
   - name: name
     type: string
     default: example-bundle
-    path: /cnab/app/foo/name.txt
-    source:
-      output: name
   - name: password
     type: string
+    path: /cnab/app/foo/password.txt
+    source:
+      output: admin-password
     sensitive: true
 
 outputs:
-  - name: name
-    path: /cnab/app/foo/name.txt
+  - name: admin-password
+    type: string
+    path: /cnab/app/foo/password.txt
     sensitive: true
 
 mixins:
